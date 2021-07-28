@@ -44,7 +44,7 @@ import net.fabricmc.tinyremapper.IMappingProvider;
 import net.fabricmc.tinyremapper.InputTag;
 import net.fabricmc.tinyremapper.OutputConsumerPath;
 import net.fabricmc.tinyremapper.TinyRemapper;
-import net.fabricmc.tinyremapper.extension.mixin.MixinAnnotationProcessor;
+import net.fabricmc.tinyremapper.extension.mixin.MixinExtension;
 
 public class JarRemapper {
 	private final List<IMappingProvider> mappingProviders = new ArrayList<>();
@@ -76,12 +76,10 @@ public class JarRemapper {
 			}
 		}
 
-		MixinAnnotationProcessor mixin = new MixinAnnotationProcessor();
+		MixinExtension mixin = new MixinExtension();
 
 		TinyRemapper remapper = remapperBuilder
-				.extraAnalyzeVisitor(mixin::getAnalyzeVisitor)
-				.extraPreApplyVisitor(mixin::getPreApplyVisitor)
-				.stateProcessor(mixin::process)
+				.extension(mixin)
 				.build();
 
 		Path[] remapClasspath = classPath.stream()
